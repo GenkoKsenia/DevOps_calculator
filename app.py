@@ -3,7 +3,7 @@ import sys
 import os
 sys.path.append(os.path.dirname(__file__))
 
-from calculator import add, subtract, multiply, divide
+from src.calculator import add, subtract, multiply, divide
 
 app = Flask(__name__)
 
