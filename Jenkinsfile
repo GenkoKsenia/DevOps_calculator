@@ -60,10 +60,6 @@ pipeline {
     }
     
     post {
-        
-    }
-
-    post {
         always {
             echo 'Pipeline completed for branch: ' + env.BRANCH_NAME
         }
