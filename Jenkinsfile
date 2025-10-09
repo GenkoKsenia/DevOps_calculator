@@ -1,7 +1,11 @@
 pipeline {
     agent any
     
-   
+    environment {
+        DEPLOY_SERVER = 'http://91.240.254.209/'  
+        DEV_PORT = '8001'
+        PROD_PORT = '8000'
+    }
     
     stages {
         stage('Checkout Code') {
@@ -22,19 +26,19 @@ pipeline {
             }
         }
         
-        stage('Publish Test Results') {
-            steps {
-                junit 'test-results.xml'
-            }
-        }
-        
         stage('Deploy to Dev') {
             when {
                 branch 'dev'
             }
             steps {
-                sh 'echo "Deploying to development server..."'
-                // Пока просто эхо, потом можно добавить реальный деплой
+                sh '''
+                    echo "Starting development server..."
+                    # Останавливаем предыдущую версию
+                    pkill -f "python3 app.py" || true
+                    # Запускаем новую версию в фоне
+                    nohup python3 app.py --port ${DEV_PORT} > dev.log 2>&1 &
+                    echo "Development server started on port ${DEV_PORT}"
+                '''
             }
         }
         
@@ -43,18 +47,28 @@ pipeline {
                 branch 'main'
             }
             steps {
-                sh 'echo "Deploying to production server..."'
-                // Пока просто эхо
+                sh '''
+                    echo "Starting PRODUCTION server..."
+                    # Останавливаем предыдущую версию
+                    pkill -f "python3 app.py" || true
+                    # Запускаем production версию
+                    nohup python3 app.py --port ${PROD_PORT} > prod.log 2>&1 &
+                    echo "PRODUCTION server started on port ${PROD_PORT}"
+                '''
             }
         }
     }
     
     post {
+        
+    }
+
+    post {
         always {
             echo 'Pipeline completed for branch: ' + env.BRANCH_NAME
         }
         success {
-            echo 'All tests passed!'
+            echo "Deployment completed! Server running on port ${env.BRANCH_NAME == 'main' ? PROD_PORT : DEV_PORT}"
         }
         failure {
             echo 'Tests failed!'
