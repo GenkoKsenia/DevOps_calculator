@@ -26,12 +26,24 @@ pipeline {
         }
         
         stage('Run Tests') {
+            when {
+                anyOf {
+                    branch 'dev'
+                    expression { env.BRANCH_NAME == null }
+                }
+            }
             steps {
                 sh 'python3 -m pytest tests/ -v --junitxml=test-results.xml'
             }
         }
         
         stage('Publish Test Results') {
+            when {
+                anyOf {
+                    branch 'dev'
+                    expression { env.BRANCH_NAME == null }
+                }
+            }
             steps {
                 junit 'test-results.xml'
             }
@@ -39,56 +51,53 @@ pipeline {
         
         stage('Deploy to Dev') {
             when {
-        anyOf {
-            branch 'dev'
-            expression { env.BRANCH_NAME == null }
-        }
-    }
-    steps {
-        sh """
-            echo "Deploying to DEVELOPMENT server..."
-            
-            # Останавливаем ВСЕ предыдущие процессы
-            pkill -f "python.*app.py" || echo "No previous processes"
-            sleep 3
-            
-            # Переходим в папку проекта
-            cd /var/lib/jenkins/workspace/Ksenia_DevOps
-            
-            # Запускаем приложение с правильным nohup
-            echo "=== Starting application ==="
-            nohup python3 app.py --port 8001 > /tmp/calculator_dev.log 2>&1 </dev/null &
-            
-            # Даем время на запуск
-            sleep 10
-            
-            echo "=== Deployment Check ==="
-            echo "Processes:"
-            ps aux | grep python | grep app.py
-            echo "Ports:"
-            netstat -tlnp | grep 800
-            echo "Recent logs:"
-            tail -10 /tmp/calculator_dev.log
-            
-            echo "=== Testing application ==="
-            if curl -s --connect-timeout 10 http://localhost:8001/ > /dev/null; then
-                echo "Application is RUNNING and RESPONDING!"
-                echo "Access at: http://91.240.254.209:8001/"
-            else
-                echo "Application failed to start"
-                echo "=== Full logs ==="
-                cat /tmp/calculator_dev.log
-            fi
-        """
-    }
+                anyOf {
+                    branch 'dev'
+                    expression { env.BRANCH_NAME == null }
+                }
+            }
+            steps {
+                sh """
+                    echo "Deploying to DEVELOPMENT server..."
+                    
+                    # Останавливаем ВСЕ предыдущие процессы
+                    pkill -f "python.*app.py" || echo "No previous processes"
+                    sleep 3
+                    
+                    # Переходим в папку проекта
+                    cd /var/lib/jenkins/workspace/Ksenia_DevOps
+                    
+                    # Запускаем приложение с правильным nohup
+                    echo "=== Starting application ==="
+                    nohup python3 app.py --port ${DEV_PORT} > /tmp/calculator_dev.log 2>&1 </dev/null &
+                    
+                    # Даем время на запуск
+                    sleep 10
+                    
+                    echo "=== Deployment Check ==="
+                    echo "Processes:"
+                    ps aux | grep python | grep app.py
+                    echo "Ports:"
+                    netstat -tlnp | grep 800
+                    echo "Recent logs:"
+                    tail -10 /tmp/calculator_dev.log
+                    
+                    echo "=== Testing application ==="
+                    if curl -s --connect-timeout 10 http://localhost:${DEV_PORT}/ > /dev/null; then
+                        echo "Application is RUNNING and RESPONDING!"
+                        echo "Access at: http://${DEPLOY_SERVER}:${DEV_PORT}/"
+                    else
+                        echo "Application failed to start"
+                        echo "=== Full logs ==="
+                        cat /tmp/calculator_dev.log
+                    fi
+                """
+            }
         }
         
         stage('Deploy to Production') {
             when {
-                anyOf {
-                    branch 'master'
-                    expression { env.BRANCH_NAME == 'master' }
-                }
+                branch 'master'
             }
             steps {
                 sh """
