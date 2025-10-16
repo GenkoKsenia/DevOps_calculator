@@ -86,8 +86,8 @@ pipeline {
         stage('Deploy to Production') {
             when {
                 anyOf {
-                    branch 'main'
-                    expression { env.BRANCH_NAME == 'main' }
+                    branch 'master'
+                    expression { env.BRANCH_NAME == 'master' }
                 }
             }
             steps {
