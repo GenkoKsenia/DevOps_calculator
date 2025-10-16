@@ -46,7 +46,7 @@ pipeline {
     }
     steps {
         sh """
-            echo "🚀 Deploying to DEVELOPMENT server..."
+            echo "Deploying to DEVELOPMENT server..."
             
             # Останавливаем ВСЕ предыдущие процессы
             pkill -f "python.*app.py" || echo "No previous processes"
@@ -72,10 +72,10 @@ pipeline {
             
             echo "=== Testing application ==="
             if curl -s --connect-timeout 10 http://localhost:8001/ > /dev/null; then
-                echo "✅ Application is RUNNING and RESPONDING!"
-                echo "📡 Access at: http://91.240.254.209:8001/"
+                echo "Application is RUNNING and RESPONDING!"
+                echo "Access at: http://91.240.254.209:8001/"
             else
-                echo "❌ Application failed to start"
+                echo "Application failed to start"
                 echo "=== Full logs ==="
                 cat /tmp/calculator_dev.log
             fi
