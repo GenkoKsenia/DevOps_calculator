@@ -28,7 +28,7 @@ pipeline {
                 sh 'python -m venv venv' 
                 sh '. venv/bin/activate'
                 sh 'pip install -r requirements.txt' 
-                sh 'python app.py --port 8080' 
+                sh 'python app.py --port 8081' 
             }
         }
 
@@ -133,7 +133,12 @@ pipeline {
 //         failure {
 //             echo 'Pipeline Failed! Check test results and logs.'
 //         }
-     }
+    }
+      post {
+        always {
+            cleanWs()  // Очищает workspace после сборки
+        }
+    }
 
 
     
