@@ -8,7 +8,7 @@ pipeline {
 	}
 
     options {
-        timeout(time: 10, unit: 'MINUTES')
+        timeout(time: 5, unit: 'MINUTES')
         skipDefaultCheckout()
     }
 
@@ -29,53 +29,31 @@ pipeline {
                 sh '. venv/bin/activate'
                 sh 'pip install -r requirements.txt' 
                 sh 'python app.py --port 8081' 
+                sh 'sleep 3'
+                sh 'pkill -f "python app.py" || true'
+
+            }
+            post {
+               always {
+                 cleanWs()  
+               }
             }
         }
 
-//         stage('Run Backend Tests') {
-//             steps {
-//                 script {
-//                     echo "Starting up services (db, namenode, backend) for testing..."
-//                     sh 'docker rm -f filedropper_db filedropper_hdfs_namenode filedropper_hdfs_datanode1 filedropper_hdfs_datanode2 filedropper_backend filedropper_frontend || true'
 
-// 					sh 'docker-compose up -d --remove-orphans'                    
-
-// 					echo "Waiting for services to be ready..."
-// 					    sh '''
-// 					        timeout 180s bash -c '
-// 					            until docker-compose ps backend | grep -q "healthy\\|Up"; do
-// 					                echo "Waiting for backend to be ready..."
-// 					                sleep 5
-// 					            done
-// 					        '
-// 					        echo "Backend is ready!"
-// 					'''
-
-// 					echo "Waiting for HDFS to be ready (5 min timeout)..."
-//                     sh '''
-//                         timeout 300s bash -c ' 
-//                             until docker-compose exec -T namenode hadoop fs -ls / > /dev/null 2>&1; do
-//                                 echo "Waiting for HDFS namenode..."
-//                                 sleep 5
-//                             done
-//                         '
-//                         echo "HDFS is ready!"
-//                     '''
-
-//                     echo "Running database migrations..."
-//                     sh 'docker-compose exec -T backend alembic upgrade head' 
-                    
-//                     echo "Executing backend tests with pytest..."
-//                     sh 'docker-compose exec -T backend python -m pytest tests'
-//                 }
-//             }
-//             post {
-//                 always {
-//                     echo "Shutting down docker-compose services..."
-//                     sh 'docker-compose down -v --remove-orphans'
-//                 }
-//             }
-//         }
+        stage('Run Tests') {
+            steps {
+                script {
+                    sh 'python -m pytest tests'
+                }
+            }
+            post {
+                always {
+                    echo "Shutting down docker-compose services..."
+                    sh 'docker-compose down -v --remove-orphans'
+                }
+            }
+        }
 
 //         stage('Deploy to Staging') {
 //             when {
@@ -134,7 +112,7 @@ pipeline {
 //             echo 'Pipeline Failed! Check test results and logs.'
 //         }
     }
-      post {
+    post {
         always {
             cleanWs()  // Очищает workspace после сборки
         }
