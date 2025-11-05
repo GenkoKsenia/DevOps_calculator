@@ -20,12 +20,15 @@ pipeline {
             }
         }
         
-//         stage('Build Backend Image') {
-//             steps {
-//                 echo "Building backend Docker image..."
-//                 sh 'docker-compose build backend' 
-//             }
-//         }
+        stage('Build Backend Image') {
+            steps {
+                echo "Building backend..."
+                sh 'python -m venv venv' 
+                sh 'source venv/bin/activate'
+                sh 'pip install -r requirements.txt' 
+                sh 'python app.py --port 8080' 
+            }
+        }
 
 //         stage('Run Backend Tests') {
 //             steps {
