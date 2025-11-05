@@ -75,7 +75,7 @@ rm /root/''' + artifactName + '''
 python -m venv venv 
 source venv/bin/activate
 pip install -r requirements.txt
-sh 'python app.py --port 8081' 
+python app.py --port 8081 
 EOF
 '''
                     }
