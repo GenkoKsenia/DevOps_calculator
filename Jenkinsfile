@@ -41,10 +41,13 @@ pipeline {
         }
 
         post {
+            
             always {
                 cleanWs()  
             }
         }
+
+
 
 //         stage('Deploy to Staging') {
 //             when {
