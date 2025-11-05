@@ -20,7 +20,7 @@ pipeline {
             }
         }
         
-        stage('Build Backend Image') {
+        stage('Build Backend ') {
             steps {
 
                 echo "Building backend..."
@@ -28,15 +28,6 @@ pipeline {
                 sh 'python -m venv venv' 
                 sh '. venv/bin/activate'
                 sh 'pip install -r requirements.txt' 
-                sh 'python app.py --port 8081' 
-                sh 'sleep 3'
-                sh 'pkill -f "python app.py" || true'
-
-            }
-            post {
-               always {
-                 cleanWs()  
-               }
             }
         }
 
@@ -47,11 +38,11 @@ pipeline {
                     sh 'python -m pytest tests'
                 }
             }
-            post {
-                always {
-                    echo "Shutting down docker-compose services..."
-                    sh 'docker-compose down -v --remove-orphans'
-                }
+        }
+
+        post {
+            always {
+                cleanWs()  
             }
         }
 
