@@ -26,7 +26,7 @@ pipeline {
                 echo "Building backend..."
                 sh 'sudo apt install -y python3.10-venv' 
                 sh 'python -m venv venv' 
-                sh 'source venv/bin/activate'
+                sh '. venv/bin/activate'
                 sh 'pip install -r requirements.txt' 
                 sh 'python app.py --port 8080' 
             }
