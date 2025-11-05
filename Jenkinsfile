@@ -23,6 +23,7 @@ pipeline {
         stage('Build Backend Image') {
             steps {
                 echo "Building backend..."
+                sh 'apt install python3.10-venv' 
                 sh 'python -m venv venv' 
                 sh 'source venv/bin/activate'
                 sh 'pip install -r requirements.txt' 
