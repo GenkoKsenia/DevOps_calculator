@@ -2,7 +2,7 @@ import sys
 import os
 sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'src'))
 
-from calculator import add, subtract, multiply, divide
+from src.calculator import add, subtract, multiply, divide
 
 def test_add():
     assert add(2, 3) == 5
