@@ -5,8 +5,8 @@ pipeline {
         SSH_CREDS_ID = 'server-key' 
         HOST = 'root@91.240.254.209'
         PROD_DIR = '/root/prod/DevOps_calculator'
-        BACKEND_PORT = '5000'
-        FRONTEND_PORT = '3000'
+        BACKEND_PORT = '8081'
+        FRONTEND_PORT = '5175'
     }
 
     options {
