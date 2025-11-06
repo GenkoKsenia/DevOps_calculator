@@ -10,7 +10,7 @@ async function calculate() {
     document.getElementById('error').innerHTML = '';
     
     if (!a || !b) {
-        showError('Please enter both numbers');
+        showError('Пожалуйста, введите оба числа');
         return;
     }
     

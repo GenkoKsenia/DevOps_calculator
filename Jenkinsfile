@@ -37,8 +37,8 @@ pipeline {
             steps {
                 echo "Building frontend..."
                 dir('frontend') {
-                    sh 'python3 -m venv venv' 
-                    sh '. venv/bin/activate && pip install -r requirements.txt' 
+                   // sh 'python3 -m venv venv' 
+                   // sh '. venv/bin/activate && pip install -r requirements.txt' 
                 }
             }
         }
