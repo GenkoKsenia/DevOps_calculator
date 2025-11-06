@@ -114,7 +114,7 @@ source venv/bin/activate && python app.py --port ''' + env.BACKEND_PORT + ''' > 
 # Start Frontend
 echo "Starting frontend on port ''' + env.FRONTEND_PORT + '''..."
 cd ../frontend
-source venv/bin/activate && python app.py --port ''' + env.FRONTEND_PORT + ''' --api-url http://localhost:''' + env.BACKEND_PORT + ''' > frontend.log 2>&1 &
+source venv/bin/activate && python app.py --port ''' + env.FRONTEND_PORT'''
 
 # Wait for services to start
 sleep 5

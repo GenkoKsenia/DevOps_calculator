@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost:5000'; // Будет переопределено при запуске
+const API_URL = 'http://localhost:5000'; 
 
 async function calculate() {
     const a = document.getElementById('a').value;
