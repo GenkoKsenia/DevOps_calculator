@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculator</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Calculator</h1>
+        
+        <div class="calculator">
+            <div class="input-group">
+                <input type="number" id="a" placeholder="First number" step="any">
+                <select id="operation">
+                    <option value="add">+</option>
+                    <option value="subtract">-</option>
+                    <option value="multiply">×</option>
+                    <option value="divide">÷</option>
+                </select>
+                <input type="number" id="b" placeholder="Second number" step="any">
+            </div>
+            
+            <button onclick="calculate()">Calculate</button>
+            
+            <div id="result" class="result"></div>
+            <div id="error" class="error"></div>
+        </div>
+        
+        <div class="examples">
+            <h3>Quick Examples:</h3>
+            <button onclick="setExample(5, 3, 'add')">5 + 3</button>
+            <button onclick="setExample(10, 4, 'subtract')">10 - 4</button>
+            <button onclick="setExample(6, 7, 'multiply')">6 × 7</button>
+            <button onclick="setExample(15, 3, 'divide')">15 ÷ 3</button>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>

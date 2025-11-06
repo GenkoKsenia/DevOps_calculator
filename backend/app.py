@@ -1,28 +1,35 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 from src.calculator import add, subtract, multiply, divide
 import argparse
 
 app = Flask(__name__)
+CORS(app)  # Разрешаем запросы от фронтенда
 
-@app.route('/')
-def home():
-    return '''
-    <h1>Calculator API</h1>
-    <p>Test endpoints:</p>
-    <ul>
-        <li><a href="/calculate?operation=add&a=5&b=3">Add 5+3</a></li>
-        <li><a href="/calculate?operation=subtract&a=10&b=4">Subtract 10-4</a></li>
-        <li><a href="/calculate?operation=multiply&a=6&b=7">Multiply 6×7</a></li>
-        <li><a href="/calculate?operation=divide&a=15&b=3">Divide 15÷3</a></li>
-    </ul>
-    '''
+@app.route('/api/health')
+def health():
+    return jsonify({'status': 'healthy'})
 
-@app.route('/calculate')
+@app.route('/api/calculate', methods=['POST'])
 def calculate():
     try:
-        operation = request.args.get('operation')
-        a = float(request.args.get('a'))
-        b = float(request.args.get('b'))
+        data = request.get_json()
+        
+        if not data:
+            return jsonify({'error': 'No JSON data provided'}), 400
+            
+        operation = data.get('operation')
+        a = data.get('a')
+        b = data.get('b')
+        
+        if operation is None or a is None or b is None:
+            return jsonify({'error': 'Missing parameters. Required: operation, a, b'}), 400
+        
+        try:
+            a = float(a)
+            b = float(b)
+        except ValueError:
+            return jsonify({'error': 'Parameters a and b must be numbers'}), 400
         
         if operation == 'add':
             result = add(a, b)
@@ -47,8 +54,8 @@ def calculate():
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--port', type=int, default=8000, help='Port to run the server on')
+    parser.add_argument('--port', type=int, default=5000, help='Port to run the server on')
     args = parser.parse_args()
     
-    print(f"Starting Calculator server on port {args.port}...")
+    print(f"Starting Calculator API server on port {args.port}...")
     app.run(host='0.0.0.0', port=args.port, debug=False)
