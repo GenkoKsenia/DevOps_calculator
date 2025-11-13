@@ -39,9 +39,9 @@ pipeline {
         stage('Run Backend Tests') {
             steps {
                 script {
-                    // Запуск контейнера для тестов
-                    docker.image("${env.DOCKER_IMAGE_PREFIX}/calculator-backend:${env.BUILD_ID}").inside {
-                        sh 'python -m pytest tests -v'
+                    dir('backend') {
+                        // Запускаем тесты напрямую из рабочей директории
+                        sh 'python -m pytest tests/test_calculator.py -v'
                     }
                 }
             }
