@@ -123,38 +123,13 @@ sleep 5
 echo "Checking services..."
 ps aux | grep -E "(app.py)" | grep -v grep
 
-echo "✅ Deployment complete!"
+echo "Deployment complete!"
 echo "Backend: http://localhost:''' + env.BACKEND_PORT + '''/api/health"
 echo "Frontend: http://localhost:''' + env.FRONTEND_PORT + '''"
 EOF
 '''
                     }
-                    echo "✅ Deployment to Staging complete. Services restarted."
-                }
-            }
-        }
-        
-        stage('Health Check') {
-            when {
-                branch 'master'
-            }
-            steps {
-                script {
-                    sleep 10  // Даем время сервисам запуститься
-                    withCredentials([sshUserPrivateKey(credentialsId: env.SSH_CREDS_ID, keyFileVariable: 'SSH_KEY')]) {
-                        sh '''
-ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i ''' + SSH_KEY + ''' ''' + env.HOST + ''' << 'EOF'
-echo "Checking backend health..."
-curl -f http://localhost:''' + env.BACKEND_PORT + '''/api/health || echo "Backend health check failed"
-
-echo "Checking frontend..."
-curl -f http://localhost:''' + env.FRONTEND_PORT + ''' > /dev/null && echo "Frontend is running" || echo "Frontend check failed"
-
-echo "Checking processes..."
-ps aux | grep -E "(app.py)" | grep -v grep
-EOF
-'''
-                    }
+                    echo "Deployment to Staging complete. Services restarted."
                 }
             }
         }
