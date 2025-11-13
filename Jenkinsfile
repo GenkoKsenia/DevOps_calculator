@@ -109,12 +109,12 @@ sleep 2
 # Start Backend
 echo "Starting backend on port ''' + env.BACKEND_PORT + '''..."
 cd ../backend
-source venv/bin/activate && python app.py --port ''' + env.BACKEND_PORT + ''' > backend.log 2>&1 &
+source venv/bin/activate && nohup python app.py --port ''' + env.BACKEND_PORT + ''' > backend.log 2>&1 &
 
 # Start Frontend
 echo "Starting frontend on port ''' + env.FRONTEND_PORT + '''..."
 cd ../frontend
-source venv/bin/activate && python app.py --port ''' + env.FRONTEND_PORT'''
+source venv/bin/activate && nohup python app.py --port ''' + env.FRONTEND_PORT'''
 
 # Wait for services to start
 sleep 5
