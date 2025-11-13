@@ -1,4 +1,4 @@
-const API_URL = 'http://91.240.254.209/:5000'; 
+const API_URL = 'http://91.240.254.209:5000'; 
 
 async function calculate() {
     const a = document.getElementById('a').value;
