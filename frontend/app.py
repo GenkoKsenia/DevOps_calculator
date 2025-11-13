@@ -10,7 +10,7 @@ def index():
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--port', type=int, default=3000, help='Port to run the server on')
-    parser.add_argument('--api-url', type=str, default='http://localhost:5000', help='Backend API URL')
+    parser.add_argument('--api-url', type=str, default='http://91.240.254.209/:5000', help='Backend API URL')
     args = parser.parse_args()
     
     # Сохраняем URL API в конфигурации приложения
