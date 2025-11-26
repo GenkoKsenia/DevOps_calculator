@@ -103,7 +103,6 @@ docker run -d \\
   --restart unless-stopped \\
   ${env.DOCKER_IMAGE_PREFIX}/calculator-backend:latest
 
-
 docker run -d \\
   --name calculator-frontend \\
   -p 3000:3000 \\
