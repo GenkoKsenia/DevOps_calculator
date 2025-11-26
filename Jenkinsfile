@@ -142,7 +142,7 @@ EOF
         }
     }
 }
-
+}
 // pipeline {
 //     agent any 
 
