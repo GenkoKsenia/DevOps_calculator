@@ -5,7 +5,7 @@ pipeline {
         SSH_CREDS_ID = 'server-key' 
         HOST = 'root@91.240.254.209'
         DOCKER_IMAGE_PREFIX = 'kseniagenko' 
-    }  // ← ДОБАВЬТЕ ЭТУ ЗАКРЫВАЮЩУЮ СКОБКУ!
+    } 
 
     options {
         timeout(time: 10, unit: 'MINUTES')
